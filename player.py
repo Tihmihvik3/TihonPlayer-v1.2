@@ -7,6 +7,7 @@ import wx  # Add this import
 
 class AudioPlayer:
     def __init__(self, tab):
+        self.is_thread_running = None
         self.tab = tab
         pygame.mixer.init()
         self.is_playing = False
@@ -34,12 +35,15 @@ class AudioPlayer:
         self.is_playing = True
         self.is_paused = False
         self.start_time = time.time()
-        if threading.active_count() > 1:  # Check if the thread is already running
-            print("Поток запущен")
-        else:
-            threading.Thread(target=self.update_playback_duration).start()
+
+        # Проверяем, запущен ли поток
+        if not hasattr(self, 'is_thread_running') or not self.is_thread_running:
+            self.is_thread_running = True
+            threading.Thread(target=self.update_playback_duration, daemon=True).start()
 
     def update_playback_duration(self):
+
+        print("Метод  - дурейшан запущен")
         while self.is_playing:
             current_time = time.time() - self.start_time
             current_time = math.floor(current_time * 10) / 10
@@ -48,6 +52,7 @@ class AudioPlayer:
             if current_time + 3 >= track_time:
                 self.tab.on_next_track(None)
             time.sleep(0.5)
+        self.is_thread_running = False  # Сбрасываем флаг после завершения
 
     def on_track_end(self):
         app = wx.GetApp()
