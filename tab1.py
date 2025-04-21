@@ -7,12 +7,15 @@ from labels import CHOIS_FOLDER_LABEL
 from player import AudioPlayer
 from settings import SettingsDialog
 from context_menu import ShowContextMenu
+from config import Config
 
 all_play = True
 
 class Tab1(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
+        config = Config()
+        self.default_folder_path = config.get('FOLDER_PATH', 'folder_path1')
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.player = AudioPlayer(self)  # Pass self as the tab argument
 
@@ -73,6 +76,7 @@ class Tab1(wx.Panel):
         self.label = wx.StaticText(self, label="Плеер 1")
         self.sizer.Add(self.label, 0, wx.ALL, 5)
 
+
         # Create a ListBox and add it to the vertical BoxSizer
         self.listbox = wx.ListBox(self)
         self.sizer.Add(self.listbox, 1, wx.EXPAND | wx.ALL, 5)
@@ -109,13 +113,9 @@ class Tab1(wx.Panel):
         return notebook.GetSelection() == notebook.FindPage(self)
 
     def load_default_folder(self):
-        try:
-            with open("default_folder.txt", "r") as file:
-                self.folder_path = file.read().strip()
-                self.populate_listbox()
-                self.listbox.SetFocus()  # Set focus to the listbox after loading
-        except FileNotFoundError:
-            pass
+        self.folder_path = self.default_folder_path
+        self.populate_listbox()
+        self.listbox.SetFocus()  # Set focus to the listbox after loading
 
     def populate_listbox(self):
         self.listbox.Clear()
@@ -131,11 +131,8 @@ class Tab1(wx.Panel):
     def on_browse_folder(self, event):
         if not self.is_active_tab():
             return
-        try:
-            with open("default_folder.txt", "r") as file:
-                default_path = file.read().strip()
-        except FileNotFoundError:
-            default_path = ""
+
+        default_path = self.default_folder_path
 
         with wx.DirDialog(self, CHOIS_FOLDER_LABEL, defaultPath=default_path, style=wx.DD_DEFAULT_STYLE) as dialog:
             if dialog.ShowModal() == wx.ID_OK:
