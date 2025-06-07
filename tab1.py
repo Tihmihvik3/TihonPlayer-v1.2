@@ -100,6 +100,7 @@ class Tab1(wx.Panel):
 
         # Bind listbox selection event
         self.listbox.Bind(wx.EVT_LISTBOX, self.on_listbox_selection)
+        self.listbox.Bind(wx.EVT_KEY_DOWN, self.on_key_press)
 
         # Load default folder and populate listbox
         self.load_default_folder()
@@ -293,6 +294,10 @@ class Tab1(wx.Panel):
 
         # Ignore Ctrl+Up and Ctrl+Down key events
         if (modifiers == wx.MOD_CONTROL and keycode in (wx.WXK_UP, wx.WXK_DOWN)):
+            return
+        if keycode in [wx.WXK_LEFT, wx.WXK_RIGHT, wx.WXK_PAGEUP, wx.WXK_PAGEDOWN]:
+            return
+        if event.ShiftDown() and keycode in [wx.WXK_UP, wx.WXK_DOWN]:
             return
 
         if keycode in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER):  # Check for Enter or Numpad Enter

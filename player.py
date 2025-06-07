@@ -1,4 +1,5 @@
 import pygame
+from ffpyplayer.player import MediaPlayer
 import time
 import threading
 import math

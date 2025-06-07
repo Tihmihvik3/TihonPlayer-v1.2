@@ -15,8 +15,10 @@ class MyFrame(wx.Frame):
         self.notebook.SetSelection(0)
         self.notebook.tab1.listbox.SetFocus()
 
+
         # Bind the close event to the on_close method
         self.Bind(wx.EVT_CLOSE, self.on_close)
+
 
         accel_tbl = wx.AcceleratorTable([
             (wx.ACCEL_CTRL, ord('1'), 1000),  # Ctrl+1 for Tab 1
