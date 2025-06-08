@@ -12,8 +12,10 @@ class ShowContextMenu:
         self.listbox = listbox
         self.folder_path = folder_path
         print(self.folder_path)
+        self.is_open = False  # Добавляем атрибут для отслеживания состояния
 
     def show(self):
+        self.is_open = True  # Устанавливаем в True при открытии
         selection = self.listbox.GetSelection()
         if selection != wx.NOT_FOUND:
             file_name = self.listbox.GetString(selection)
@@ -34,6 +36,7 @@ class ShowContextMenu:
             
             self.parent.PopupMenu(menu, center_pos)
             menu.Destroy()
+            self.is_open = False  # Устанавливаем в False после закрытия
 
     def on_copy(self, event):
         global clipboard

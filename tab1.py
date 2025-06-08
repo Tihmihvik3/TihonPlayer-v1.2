@@ -23,7 +23,7 @@ class Tab1(wx.Panel):
         self.current_file = None
 
         # Create a horizontal BoxSizer for the buttons
-        button_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        button_sizer = wx.WrapSizer(wx.HORIZONTAL)
 
         # Create buttons and add them to the horizontal BoxSizer
         buttons = create_buttons(self)
@@ -81,9 +81,6 @@ class Tab1(wx.Panel):
         self.listbox = wx.ListBox(self)
         self.sizer.Add(self.listbox, 1, wx.EXPAND | wx.ALL, 5)
 
-        # Initialize the context menu handler after the listbox is created
-        self.context_menu = ShowContextMenu(self, self.listbox, self.folder_path)
-
         # Create the Browse button and add it to the vertical BoxSizer
         self.browse_button.Bind(wx.EVT_BUTTON, self.on_browse_folder)
         self.sizer.Add(self.browse_button, 0, wx.ALL, 5)
@@ -97,6 +94,9 @@ class Tab1(wx.Panel):
         # Initialize the hotkeys manager and register hotkeys
         self.hotkeys_manager = HotkeysManager(self)
         self.hotkeys_manager.register_hotkeys()
+
+        # Initialize the context menu handler after the listbox is created
+        self.context_menu = ShowContextMenu(self, self.listbox, self.folder_path)
 
         # Bind listbox selection event
         self.listbox.Bind(wx.EVT_LISTBOX, self.on_listbox_selection)
@@ -142,8 +142,13 @@ class Tab1(wx.Panel):
                 self.listbox.SetFocus()  # Set focus to the listbox
 
     def on_play(self, event):
+        # Проверка, открыто ли контекстное меню
+        if self.context_menu.is_open:
+            print("Контекстное меню открыто. Воспроизведение отменено.")  # Debug print
+            return
         if not self.is_active_tab():
             return
+
         selection = self.listbox.GetSelection()
         if selection != wx.NOT_FOUND:
             file_name = self.listbox.GetString(selection)
@@ -226,6 +231,10 @@ class Tab1(wx.Panel):
         self.Layout()
 
     def on_mute(self, event):
+        # Проверка, открыто ли контекстное меню
+        if self.context_menu.is_open:  # Предполагается, что у ShowContextMenu есть атрибут is_open
+            print("Контекстное меню открыто. Воспроизведение отменено.")  # Debug print
+            return
         if not self.is_active_tab():
             return
         print("Muting playback")  # Debug print
@@ -300,8 +309,7 @@ class Tab1(wx.Panel):
         if event.ShiftDown() and keycode in [wx.WXK_UP, wx.WXK_DOWN]:
             return
 
-        if keycode in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER):  # Check for Enter or Numpad Enter
-            self.on_play(None)
+
         elif keycode == wx.WXK_UP:  # Handle Up Arrow key
             self.navigate_listbox(-1)
         elif keycode == wx.WXK_DOWN:  # Handle Down Arrow key

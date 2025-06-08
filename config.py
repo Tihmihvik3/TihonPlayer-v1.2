@@ -25,7 +25,8 @@ class Config:
         }
         self.config['REPEAT_MUSIC'] = {
             'repeat_track': 'False',
-            'repeat_list': 'True'
+            'repeat_list': 'True',
+            'all_list': 'True'
         }
         self.save()
     
