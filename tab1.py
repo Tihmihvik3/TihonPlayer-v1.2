@@ -11,11 +11,15 @@ from config import Config
 
 all_play = True
 
+
 class Tab1(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
-        config = Config()
-        self.default_folder_path = config.get('FOLDER_PATH', 'folder_path1')
+        self.config = Config()
+        self.default_folder_path = self.config.get('FOLDER_PATH', 'folder_path1')
+        self.repeat_track = self.config.get('REPEAT_MUSIC', 'repeat_track') == 'True'
+        self.repeat_list = self.config.get('REPEAT_MUSIC', 'repeat_list') == 'True'
+        self.play_list = self.config.get('REPEAT_MUSIC', 'all_list') == 'True'
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.player = AudioPlayer(self)  # Pass self as the tab argument
 
@@ -75,7 +79,6 @@ class Tab1(wx.Panel):
         # Add a label to the panel between buttons and listbox
         self.label = wx.StaticText(self, label="Плеер 1")
         self.sizer.Add(self.label, 0, wx.ALL, 5)
-
 
         # Create a ListBox and add it to the vertical BoxSizer
         self.listbox = wx.ListBox(self)
@@ -244,19 +247,15 @@ class Tab1(wx.Panel):
         self.update_button_states()
 
     def update_button_states(self):
-        selection = self.listbox.GetSelection()
-        enable = selection != wx.NOT_FOUND
-        self.play_button.Enable(enable)
-        self.stop_button.Enable(enable)
-        self.seek_backward_button.Enable(enable)
-        self.seek_forward_button.Enable(enable)
-        self.prev_track_button.Enable(enable)
-        self.next_track_button.Enable(enable)
-        self.volume_up_button.Enable(enable)
-        self.volume_down_button.Enable(enable)
-        self.pause_button.Enable(enable)
-        self.resume_button.Enable(enable)
-        self.mute_button.Enable(enable)
+        buttons = [
+            self.play_button, self.stop_button, self.seek_backward_button,
+            self.seek_forward_button, self.prev_track_button, self.next_track_button,
+            self.volume_up_button, self.volume_down_button, self.pause_button,
+            self.resume_button, self.mute_button
+        ]
+        enable = self.listbox.GetSelection() != wx.NOT_FOUND
+        for button in buttons:
+            button.Enable(enable)
 
     def on_show_info(self, event):
         notebook = self.GetParent()
@@ -332,3 +331,11 @@ class Tab1(wx.Panel):
         settings_dialog = SettingsDialog(self)
         settings_dialog.ShowModal()
         settings_dialog.Destroy()
+
+    def on_bookmarks(self, index):
+        if index == 1:
+            self.player.bookmarks('bookmark_path1', 'bookmark_start_time1', 'bookmark_vol1', self.current_file)
+        if index == 2:
+            self.player.bookmarks('bookmark_path2', 'bookmark_start_time2', 'bookmark_vol2', self.current_file)
+        if index == 3:
+            self.player.bookmarks('bookmark_path3', 'bookmark_start_time3', 'bookmark_vol3', self.current_file)

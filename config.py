@@ -28,6 +28,17 @@ class Config:
             'repeat_list': 'True',
             'all_list': 'True'
         }
+        self.config['BOOKMARKS'] = {
+            'bookmark_path1': '',
+            'bookmark_path2': '',
+            'bookmark_path3': '',
+            'bookmark_start_time1': '',
+            'bookmark_start_time2': '',
+            'bookmark_start_time3': '',
+            'bookmark_vol1': '',
+            'bookmark_vol2': '',
+            'bookmark_vol3': ''
+        }
         self.save()
     
     def get(self, section, option):

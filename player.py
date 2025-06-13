@@ -4,10 +4,12 @@ import time
 import threading
 import math
 import wx  # Add this import
+from config import Config
 
 
 class AudioPlayer:
     def __init__(self, tab):
+        self.config = Config()
         self.is_thread_running = None
         self.tab = tab
         pygame.mixer.init()
@@ -86,7 +88,7 @@ class AudioPlayer:
             if self.on_end_callback:
                 self.on_end_callback()
 
-    def stop_transition(self    ):
+    def stop_transition(self):
         if self.is_playing:
             pygame.mixer.music.stop()
             # self.is_playing = False
@@ -140,3 +142,9 @@ class AudioPlayer:
         self.is_paused = False
         self.start_time = time.time()
 
+    def bookmarks(self, bookmark_path, start_time, vol, path):
+        current_pos = time.time() - self.start_time
+        self.config.set('BOOKMARKS', bookmark_path, path)
+        self.config.set('BOOKMARKS', start_time, str(current_pos))
+        self.config.set('BOOKMARKS', vol, str(self.volume))
+        self.config.save()

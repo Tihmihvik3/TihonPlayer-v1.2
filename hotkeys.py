@@ -30,6 +30,12 @@ class HotkeysManager:
         keyboard.add_hotkey('ctrl+p', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_settings, None))
         keyboard.add_hotkey('shift+q', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_play_sample, None, '01.mp3'))
         keyboard.add_hotkey('shift+w', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_play_sample, None, '02.mp3'))
+        keyboard.add_hotkey('shift+e', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_play_sample, None, '03.mp3'))
+        keyboard.add_hotkey('shift+r', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_play_sample, None, '04.mp3'))
+        keyboard.add_hotkey('shift+t', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_play_sample, None, '05.mp3'))
+        keyboard.add_hotkey('shift+1', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_bookmarks, 1))
+        keyboard.add_hotkey('shift+2', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_bookmarks, 2))
+        keyboard.add_hotkey('shift+3', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_bookmarks, 3))
         keyboard.add_hotkey('enter', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_play, None))
 
     def execute_if_active(self, func, *args, **kwargs):
