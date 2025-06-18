@@ -27,11 +27,11 @@ class AudioPlayer:
     def set_on_end_callback(self, callback):
         self.on_end_callback = callback
 
-    def play(self, filepath, on_end_callback=None):
+    def play(self, filepath, start_time_music=0, on_end_callback=None):
         if self.is_playing:
             self.stop(attenuation=True)
         pygame.mixer.music.load(filepath)
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(start=start_time_music)
         self.track_length = pygame.mixer.Sound(filepath).get_length()
         if on_end_callback:
             self.set_on_end_callback(on_end_callback)

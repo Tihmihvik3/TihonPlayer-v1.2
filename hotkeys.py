@@ -36,6 +36,9 @@ class HotkeysManager:
         keyboard.add_hotkey('shift+1', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_bookmarks, 1))
         keyboard.add_hotkey('shift+2', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_bookmarks, 2))
         keyboard.add_hotkey('shift+3', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_bookmarks, 3))
+        keyboard.add_hotkey('alt+1', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_play_bookmarks, 1))
+        keyboard.add_hotkey('alt+2', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_play_bookmarks, 2))
+        keyboard.add_hotkey('alt+3', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_play_bookmarks, 3))
         keyboard.add_hotkey('enter', lambda: wx.CallAfter(self.execute_if_active, self.tab.on_play, None))
 
     def execute_if_active(self, func, *args, **kwargs):

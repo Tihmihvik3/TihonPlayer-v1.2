@@ -339,3 +339,15 @@ class Tab1(wx.Panel):
             self.player.bookmarks('bookmark_path2', 'bookmark_start_time2', 'bookmark_vol2', self.current_file)
         if index == 3:
             self.player.bookmarks('bookmark_path3', 'bookmark_start_time3', 'bookmark_vol3', self.current_file)
+
+    def on_play_bookmarks(self, index):
+        if not self.is_active_tab():
+            return
+        if index == 1:
+            filepath=self.config.get('BOOKMARKS', 'bookmark_path1')
+            start_time_music = float(self.config.get('BOOKMARKS', 'bookmark_start_time1'))
+            self.player.play(filepath, start_time_music)
+        if index == 2:
+            self.player.play(filepath=self.config.get('BOOKMARKS', 'bookmark_path2'))
+        if index == 3:
+            self.player.play(filepath=self.config.get('BOOKMARKS', 'bookmark_path3'))
